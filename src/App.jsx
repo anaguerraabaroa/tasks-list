@@ -5,6 +5,8 @@ function App() {
   // state
   const [task, setTask] = useState("");
   const [tasksList, setTasksList] = useState([]);
+  const [edit, setEdit] = useState(false);
+  const [id, setId] = useState("");
 
   // events
   const handleChange = (e) => {
@@ -29,8 +31,33 @@ function App() {
   };
 
   const handleClick = (id) => {
+    // validate if id is in the array or not
     const filterTasks = tasksList.filter((item) => item.id !== id);
     setTasksList(filterTasks);
+  };
+
+  const handleEdit = (item) => {
+    setEdit(true);
+    setTask(item.task);
+    setId(item.id);
+  };
+
+  const editTask = (e) => {
+    e.preventDefault();
+
+    // validate if user has written a text in the input
+    if (!task.trim()) {
+      return;
+    }
+
+    // modify array
+    const editedArray = tasksList.map((item) =>
+      item.id === id ? { id: id, task: task } : item
+    );
+    setTasksList(editedArray);
+    setEdit(false);
+    setTask("");
+    setId("");
   };
 
   // render tasks list
@@ -43,7 +70,12 @@ function App() {
       >
         Delete
       </button>
-      <button className="btn btn-warning btn-sm float-end">Edit</button>
+      <button
+        className="btn btn-warning btn-sm float-end"
+        onClick={() => handleEdit(item)}
+      >
+        Edit
+      </button>
     </li>
   ));
 
@@ -57,8 +89,8 @@ function App() {
           <ul className="list-group">{tasks}</ul>
         </div>
         <div className="col-4">
-          <h4 className="text-center">Form</h4>
-          <form onSubmit={handleSubmit}>
+          <h4 className="text-center">{edit ? "Edit Task" : "Add Task"}</h4>
+          <form onSubmit={edit ? editTask : handleSubmit}>
             <input
               type="text"
               placeholder="Add task"
@@ -66,9 +98,18 @@ function App() {
               className="form-control mb-2"
               onChange={handleChange}
             />
-            <button className="btn btn-dark btn-block col-12" type="submit">
-              Add
-            </button>
+            {edit ? (
+              <button
+                className="btn btn-warning btn-block col-12"
+                type="submit"
+              >
+                Edit
+              </button>
+            ) : (
+              <button className="btn btn-dark btn-block col-12" type="submit">
+                Add
+              </button>
+            )}
           </form>
         </div>
       </div>
