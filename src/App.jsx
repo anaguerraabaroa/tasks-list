@@ -28,11 +28,21 @@ function App() {
     setTask("");
   };
 
+  const handleClick = (id) => {
+    const filterTasks = tasksList.filter((item) => item.id !== id);
+    setTasksList(filterTasks);
+  };
+
   // render tasks list
   const tasks = tasksList.map((item) => (
     <li className="list-group-item" key={item.id}>
       <span className="lead">{item.task}</span>
-      <button className="btn btn-danger btn-sm float-end mx-2">Delete</button>
+      <button
+        className="btn btn-danger btn-sm float-end mx-2"
+        onClick={() => handleClick(item.id)}
+      >
+        Delete
+      </button>
       <button className="btn btn-warning btn-sm float-end">Edit</button>
     </li>
   ));
