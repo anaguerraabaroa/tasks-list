@@ -1,11 +1,31 @@
 import React, { useState } from "react";
+import shortid from "shortid";
 
 function App() {
+  // state
   const [task, setTask] = useState("");
+  const [tasksList, setTasksList] = useState([]);
 
+  // events
   const handleChange = (e) => {
     const inputValue = e.target.value;
     setTask(inputValue);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // validate if user has written a text in the input
+    if (!task.trim()) {
+      return;
+    }
+
+    // add tasks to the array
+    // use shortid library to create a random id with generate() method
+    setTasksList([...tasksList, { id: shortid.generate(), task: task }]);
+
+    // clear input
+    setTask("");
   };
 
   return (
@@ -27,7 +47,7 @@ function App() {
         </div>
         <div className="col-4">
           <h4 className="text-center">Form</h4>
-          <form>
+          <form onSubmit={handleSubmit}>
             <input
               type="text"
               placeholder="Add task"
