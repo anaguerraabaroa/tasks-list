@@ -20,6 +20,16 @@ function App() {
         </div>
         <div className="col-4">
           <h4 className="text-center">Form</h4>
+          <form>
+            <input
+              type="text"
+              className="form-control mb-2"
+              placeholder="Add task"
+            />
+            <button className="btn btn-dark btn-block col-12" type="submit">
+              Add
+            </button>
+          </form>
         </div>
       </div>
     </div>
