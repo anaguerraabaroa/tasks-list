@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 
 function App() {
+  const [task, setTask] = useState("");
+
+  const handleChange = (e) => {
+    const inputValue = e.target.value;
+    setTask(inputValue);
+  };
+
   return (
     <div className="container mt-5">
       <h1 className="text-center">CRUD Simple</h1>
@@ -23,8 +30,10 @@ function App() {
           <form>
             <input
               type="text"
-              className="form-control mb-2"
               placeholder="Add task"
+              value={task}
+              className="form-control mb-2"
+              onChange={handleChange}
             />
             <button className="btn btn-dark btn-block col-12" type="submit">
               Add
