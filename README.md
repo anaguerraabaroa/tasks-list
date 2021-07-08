@@ -8,7 +8,7 @@ This is a responsive tasks list app developed with [<img src = "https://img.shie
 
 Project inspired by the "Crud Hooks" exercise of the [**React JS Desde Cero! Hooks, Redux, Context, Firebase y más!**](https://www.udemy.com/course/curso-react-js/) course.
 
-**[Project URL]()** is available on GitHub Pages.
+**[Project URL](https://anaguerraabaroa.github.io/tasks-list/)** is available on GitHub Pages.
 
 ## **Quick start guide**
 
