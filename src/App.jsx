@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import shortid from "shortid";
 
+import TasksList from "./components/TasksList";
+import Form from "./components/Form";
+
 function App() {
   // state
   const [task, setTask] = useState("");
@@ -91,41 +94,17 @@ function App() {
       <h1 className="text-center">Tasks List</h1>
       <hr />
       <div className="row">
-        <div className="col-8">
-          <h4 className="text-center">Tasks</h4>
-          <ul className="list-group">
-            {tasks.length === 0 ? (
-              <li className="list-group-item">There are no tasks</li>
-            ) : (
-              tasks
-            )}
-          </ul>
-        </div>
-        <div className="col-4">
-          <h4 className="text-center">{edit ? "Edit Task" : "Add Task"}</h4>
-          <form onSubmit={edit ? editTask : handleSubmit}>
-            <input
-              type="text"
-              placeholder="Add task"
-              value={task}
-              className="form-control mb-2"
-              onChange={handleChange}
-            />
-            {error ? <span className="text-danger">{error}</span> : null}
-            {edit ? (
-              <button
-                className="btn btn-warning btn-block col-12"
-                type="submit"
-              >
-                Edit
-              </button>
-            ) : (
-              <button className="btn btn-dark btn-block col-12" type="submit">
-                Add
-              </button>
-            )}
-          </form>
-        </div>
+        <TasksList tasks={tasks} />
+        <Form
+          task={task}
+          edit={edit}
+          error={error}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+          handleClick={handleClick}
+          handleEdit={handleEdit}
+          editTask={editTask}
+        />
       </div>
     </div>
   );
