@@ -1,70 +1,234 @@
-# Getting Started with Create React App
+![Mobile version](./src/images/tasks_list_mobile.png) ![Tablet version](./src/images/tasks_list_tablet.png) ![Desktop version](./src/images/tasks_list_desktop.png)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# **Tasks List**
 
-## Available Scripts
+## **About**
 
-In the project directory, you can run:
+This is a responsive tasks list app developed with [<img src = "https://img.shields.io/badge/-HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white">](https://html.spec.whatwg.org/) [<img src = "https://img.shields.io/badge/-CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white">](https://www.w3.org/Style/CSS/) [<img src="https://img.shields.io/badge/-Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=ffffff">](https://getbootstrap.com/) [<img src = "https://img.shields.io/badge/-JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">](https://www.ecma-international.org/ecma-262/) and [<img src = "https://img.shields.io/badge/-React-61DAFB?style=for-the-badge&logo=react&logoColor=black">](https://es.reactjs.org/)
 
-### `npm start`
+Project inspired by the "Crud Hooks" exercise of the [**React JS Desde Cero! Hooks, Redux, Context, Firebase y más!**](https://www.udemy.com/course/curso-react-js/) course.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**[Project URL]()** is available on GitHub Pages.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## **Quick start guide**
 
-### `npm test`
+Instructions to start this project:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Installation
 
-### `npm run build`
+- Clone repository:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+git clone [repository]
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Install NPM packages and dependencies:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+npm install
+```
 
-### `npm run eject`
+- Run project on local server:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+npm start
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## **Features**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- React app
+- Tasks list with a button to delete tasks and other button to edit tasks
+- Form to add tasks to the list that turns into a form to edit tasks
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## **Usage**
 
-## Learn More
+### **1. App component**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Handle app and events and render tasks list and app components
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```javascript
+function App() {
+  const [task, setTask] = useState("");
+  const [tasksList, setTasksList] = useState([]);
+  const [edit, setEdit] = useState(false);
+  const [id, setId] = useState("");
+  const [error, setError] = useState(null);
 
-### Code Splitting
+  const handleChange = (e) => {
+    const inputValue = e.target.value;
+    setTask(inputValue);
+  };
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-### Analyzing the Bundle Size
+    if (!task.trim()) {
+      setError("Please, don't forget to add a task");
+      return;
+    }
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+    setTasksList([...tasksList, { id: shortid.generate(), task: task }]);
+    setTask("");
+    setError(null);
+  };
 
-### Making a Progressive Web App
+  const handleClick = (id) => {
+    const filterTasks = tasksList.filter((item) => item.id !== id);
+    setTasksList(filterTasks);
+    setError(null);
+  };
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+  const handleEdit = (item) => {
+    setEdit(true);
+    setTask(item.task);
+    setId(item.id);
+    setError(null);
+  };
 
-### Advanced Configuration
+  const editTask = (e) => {
+    e.preventDefault();
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+    if (!task.trim()) {
+      setError("Please, don't forget to add a task");
+      return;
+    }
 
-### Deployment
+    const editedArray = tasksList.map((item) =>
+      item.id === id ? { id: id, task: task } : item
+    );
+    setTasksList(editedArray);
+    setEdit(false);
+    setTask("");
+    setId("");
+    setError(null);
+  };
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+  const tasks = tasksList.map((item) => (
+    <li className="list-group-item" key={item.id}>
+      <span className="lead">{item.task}</span>
+      <button
+        className="btn btn-danger btn-sm float-end mx-2"
+        onClick={() => handleClick(item.id)}
+      >
+        Delete
+      </button>
+      <button
+        className="btn btn-warning btn-sm float-end"
+        onClick={() => handleEdit(item)}
+      >
+        Edit
+      </button>
+    </li>
+  ));
 
-### `npm run build` fails to minify
+  return (
+    <div className="container mt-5">
+      <h1 className="text-center">Tasks List</h1>
+      <hr />
+      <div className="row">
+        <TasksList tasks={tasks} />
+        <Form
+          task={task}
+          edit={edit}
+          error={error}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+          handleClick={handleClick}
+          handleEdit={handleEdit}
+          editTask={editTask}
+        />
+      </div>
+    </div>
+  );
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### **2. TasksList component**
+
+- Render TasksList component
+
+```javascript
+const TasksList = (props) => {
+  const list =
+    props.tasks.length === 0 ? (
+      <li className="list-group-item">There are no tasks</li>
+    ) : (
+      props.tasks
+    );
+
+  return (
+    <div className="col-8">
+      <h4 className="text-center">Tasks</h4>
+      <ul className="list-group">{list}</ul>
+    </div>
+  );
+};
+```
+
+### **3. Form component**
+
+- Render Form component
+
+```javascript
+const Form = (props) => {
+  const error = props.error ? (
+    <span className="text-danger">{props.error}</span>
+  ) : null;
+
+  const button = props.edit ? (
+    <button className="btn btn-warning btn-block col-12" type="submit">
+      Edit
+    </button>
+  ) : (
+    <button className="btn btn-dark btn-block col-12" type="submit">
+      Add
+    </button>
+  );
+
+  return (
+    <div className="col-4">
+      <h4 className="text-center">{props.edit ? "Edit Task" : "Add Task"}</h4>
+      <form onSubmit={props.edit ? props.editTask : props.handleSubmit}>
+        <input
+          type="text"
+          placeholder="Add task"
+          value={props.task}
+          className="form-control mb-2"
+          onChange={props.handleChange}
+        />
+        {error}
+        {button}
+      </form>
+    </div>
+  );
+};
+```
+
+## **Folder Structure**
+
+```
+Tasks List
+├── docs
+├── node_modules
+├── public
+├── src
+│   ├── components
+│   │   ├── Form.jsx
+│   │   └── TasksList.jsx
+│   ├── images
+│   │    ├── tasks_list_desktop.png
+│   │    ├── tasks_list_mobile.png
+│   │    └── tasks_list_tablet.png
+│   ├── App.jsx
+│   ├── index.css
+│   └── index.jsx
+├── .gitignore
+├── LICENSE
+├── package-lock.json
+├── package.json
+└── README.md
+```
+
+## **License**
+
+This project is licensed under ![GitHub](https://img.shields.io/github/license/anaguerraabaroa/random-number?label=License&logo=MIT&style=for-the-badge)
