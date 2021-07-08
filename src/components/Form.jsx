@@ -2,10 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const Form = (props) => {
+  //render error message
   const error = props.error ? (
     <span className="text-danger">{props.error}</span>
   ) : null;
 
+  // change button action
   const button = props.edit ? (
     <button className="btn btn-warning btn-block col-12" type="submit">
       Edit

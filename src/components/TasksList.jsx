@@ -18,7 +18,7 @@ const TasksList = (props) => {
   );
 };
 
-TasksList.prototypes = {
+TasksList.propTypes = {
   task: PropTypes.arrayOf(PropTypes.object),
 };
 
