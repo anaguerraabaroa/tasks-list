@@ -7,6 +7,7 @@ function App() {
   const [tasksList, setTasksList] = useState([]);
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState("");
+  const [error, setError] = useState(null);
 
   // events
   const handleChange = (e) => {
@@ -19,6 +20,7 @@ function App() {
 
     // validate if user has written a text in the input
     if (!task.trim()) {
+      setError("Please, don't forget to add a task");
       return;
     }
 
@@ -26,20 +28,23 @@ function App() {
     // use shortid library to create a random id with generate() method
     setTasksList([...tasksList, { id: shortid.generate(), task: task }]);
 
-    // clear input
+    // clear input and errors
     setTask("");
+    setError(null);
   };
 
   const handleClick = (id) => {
-    // validate if id is in the array or not
+    // create a new array filtering items that have been clicked
     const filterTasks = tasksList.filter((item) => item.id !== id);
     setTasksList(filterTasks);
+    setError(null);
   };
 
   const handleEdit = (item) => {
     setEdit(true);
     setTask(item.task);
     setId(item.id);
+    setError(null);
   };
 
   const editTask = (e) => {
@@ -47,10 +52,11 @@ function App() {
 
     // validate if user has written a text in the input
     if (!task.trim()) {
+      setError("Please, don't forget to add a task");
       return;
     }
 
-    // modify array
+    // edit and save clicked tasks
     const editedArray = tasksList.map((item) =>
       item.id === id ? { id: id, task: task } : item
     );
@@ -58,6 +64,7 @@ function App() {
     setEdit(false);
     setTask("");
     setId("");
+    setError(null);
   };
 
   // render tasks list
@@ -81,12 +88,18 @@ function App() {
 
   return (
     <div className="container mt-5">
-      <h1 className="text-center">CRUD Simple</h1>
+      <h1 className="text-center">Tasks List</h1>
       <hr />
       <div className="row">
         <div className="col-8">
-          <h4 className="text-center">Task List</h4>
-          <ul className="list-group">{tasks}</ul>
+          <h4 className="text-center">Tasks</h4>
+          <ul className="list-group">
+            {tasks.length === 0 ? (
+              <li className="list-group-item">There are no tasks</li>
+            ) : (
+              tasks
+            )}
+          </ul>
         </div>
         <div className="col-4">
           <h4 className="text-center">{edit ? "Edit Task" : "Add Task"}</h4>
@@ -98,6 +111,7 @@ function App() {
               className="form-control mb-2"
               onChange={handleChange}
             />
+            {error ? <span className="text-danger">{error}</span> : null}
             {edit ? (
               <button
                 className="btn btn-warning btn-block col-12"
